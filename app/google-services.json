@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "468027734748",
+    "project_id": "jamat-project-simulator",
+    "storage_bucket": "jamat-project-simulator.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:468027734748:android:591d6bcbf06e60e745d219",
+        "android_client_info": {
+          "package_name": "com.example.jamat_project_simulator"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMU0Vou8t_Y3Ei4kSeuitAtZcNgeDaTjE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
