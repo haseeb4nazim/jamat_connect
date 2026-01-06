@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- User Info Section with Delete Icon -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- User Avatar -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#EFF6FF">
+
+                <TextView
+                    android:id="@+id/txtUserInitial"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="A"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="#2563EB"/>
+            </androidx.cardview.widget.CardView>
+
+            <!-- User Details -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="12dp">
+
+                <TextView
+                    android:id="@+id/txtUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="User Name"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#111827"/>
+
+                <TextView
+                    android:id="@+id/txtUserEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="user@example.com"
+                    android:textSize="13sp"
+                    android:textColor="#6B7280"
+                    android:layout_marginTop="2dp"/>
+            </LinearLayout>
+
+            <!-- Status Badge (shown for accepted/rejected) -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/statusBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginEnd="8dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#E8F5E9">
+
+                <TextView
+                    android:id="@+id/txtStatusBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ACCEPTED"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textColor="#4CAF50"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="6dp"/>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Delete Icon Button -->
+            <ImageView
+                android:id="@+id/btnDelete"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:padding="6dp"
+                android:src="@android:drawable/ic_menu_delete"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Delete request"
+                app:tint="#DC2626"/>
+        </LinearLayout>
+
+        <!-- Jamat Info -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical"
+            android:background="#F9FAFB"
+            android:padding="10dp"
+            android:layout_marginBottom="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="👥 "
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/txtJammatName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Jamat: Lahore to Karachi"
+                android:textSize="14sp"
+                android:textColor="#4B5563"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <!-- Request Date -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📅 "
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/txtRequestDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Requested: 01 Jan 2025, 10:30 AM"
+                android:textSize="12sp"
+                android:textColor="#9CA3AF"/>
+        </LinearLayout>
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E5E7EB"
+            android:layout_marginVertical="14dp"/>
+
+        <!-- Action Buttons (shown only for pending) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:weightSum="2">
+
+            <!-- Reject Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnReject"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                android:text="✗ Reject"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#DC2626"
+                app:cornerRadius="10dp"
+                app:strokeColor="#DC2626"
+                app:strokeWidth="2dp"
+                app:backgroundTint="#FFFFFF"
+                android:paddingVertical="10dp"/>
+
+            <!-- Accept Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAccept"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:text="✓ Accept"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                app:cornerRadius="10dp"
+                app:backgroundTint="#16A34A"
+                android:paddingVertical="10dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

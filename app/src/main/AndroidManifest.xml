@@ -9,42 +9,64 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Jamat_Project_simulator">
+
+        <!-- User Activities -->
+        <activity
+            android:name=".ViewAvailableJammatsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".MyRequestsActivity"
+            android:exported="false" />
+
+        <!-- Admin Activities -->
         <activity
             android:name=".UpdateJammatActivity"
             android:exported="false" />
+
         <activity
             android:name=".ViewJammatsActivity"
             android:exported="false" />
+
         <activity
             android:name=".JoinRequestActivity"
             android:exported="false" />
+
         <activity
             android:name=".CreateJammatActivity"
             android:exported="false" />
+
         <activity
             android:name=".AdminDashBoard"
-            android:exported="false" /> <!-- Splash Activity (Launcher) -->
+            android:exported="false" />
+
+        <!-- Splash Activity (Launcher) -->
         <activity
             android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Dashboard (opened after login) -->
+        </activity>
+
+        <!-- User Dashboard -->
         <activity
             android:name=".UserDashBoard"
-            android:exported="true" /> <!-- Reset Password -->
+            android:exported="false" />
+
+        <!-- Auth Activities -->
         <activity
             android:name=".ResetPasswordActivity"
-            android:exported="true" /> <!-- Signup -->
+            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
-            android:exported="true" /> <!-- Login -->
+            android:exported="false" />
+
         <activity
             android:name=".LoginActivity"
-            android:exported="true" />
+            android:exported="false" />
     </application>
 
 </manifest>

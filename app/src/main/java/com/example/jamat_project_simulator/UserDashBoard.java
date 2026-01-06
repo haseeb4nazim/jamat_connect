@@ -15,7 +15,8 @@ public class UserDashBoard extends AppCompatActivity {
 
     private TextView txtWelcome;
     private FirebaseAuth auth;
-    private CardView cardLogout;
+    // IMPORTANT: Variable name is cardRequests (matches XML id)
+    private CardView cardNearby, cardRequests, cardRecommended, cardProfile, cardLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +26,12 @@ public class UserDashBoard extends AppCompatActivity {
         // Initialize Firebase Auth
         auth = FirebaseAuth.getInstance();
 
-        // Initialize Views
+        // Initialize Views - All IDs match your XML exactly
         txtWelcome = findViewById(R.id.txtWelcome);
+        cardNearby = findViewById(R.id.cardNearby);
+        cardRequests = findViewById(R.id.cardRequests);  // ✅ This matches your XML
+        cardRecommended = findViewById(R.id.cardRecommended);
+        cardProfile = findViewById(R.id.cardProfile);
         cardLogout = findViewById(R.id.cardLogout);
 
         // Get current user
@@ -38,9 +43,7 @@ public class UserDashBoard extends AppCompatActivity {
             // If name is null, extract name from email
             if (name == null || name.isEmpty()) {
                 if (email != null && email.contains("@")) {
-                    // Extract the part before @ as name
                     name = email.substring(0, email.indexOf("@"));
-                    // Capitalize first letter
                     name = name.substring(0, 1).toUpperCase() + name.substring(1);
                 } else {
                     name = "User";
@@ -49,20 +52,41 @@ public class UserDashBoard extends AppCompatActivity {
 
             txtWelcome.setText("Welcome Back, " + name + "!");
         } else {
-            // If no user is logged in, redirect to login
             Intent intent = new Intent(UserDashBoard.this, LoginActivity.class);
             startActivity(intent);
             finish();
+            return;
         }
 
-        // Logout functionality
+        // Nearby Jamats - Opens ViewAvailableJammatsActivity
+        cardNearby.setOnClickListener(v -> {
+            Intent intent = new Intent(UserDashBoard.this, ViewAvailableJammatsActivity.class);
+            startActivity(intent);
+        });
+
+        // My Join Requests - Opens MyRequestsActivity
+        cardRequests.setOnClickListener(v -> {
+            Intent intent = new Intent(UserDashBoard.this, MyRequestsActivity.class);
+            startActivity(intent);
+        });
+
+        // Recommended Jamats - Coming Soon
+        cardRecommended.setOnClickListener(v -> {
+            Toast.makeText(this, "Coming Soon! AI-powered recommendations", Toast.LENGTH_SHORT).show();
+        });
+
+        // Profile Settings - Coming Soon
+        cardProfile.setOnClickListener(v -> {
+            Toast.makeText(this, "Coming Soon! Profile settings", Toast.LENGTH_SHORT).show();
+        });
+
+        // Logout
         cardLogout.setOnClickListener(v -> {
-            auth.signOut(); // Sign out user
+            auth.signOut();
             Toast.makeText(UserDashBoard.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
 
-            // Redirect to LoginActivity
             Intent intent = new Intent(UserDashBoard.this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear back stack
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
         });

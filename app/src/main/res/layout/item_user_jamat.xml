@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Jamat Name -->
+        <TextView
+            android:id="@+id/txtName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Jamat Name"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#111827"/>
+
+        <!-- Route -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_location"
+                app:tint="#6B7280"/>
+
+            <TextView
+                android:id="@+id/txtRoute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lahore → Karachi"
+                android:textSize="14sp"
+                android:textColor="#6B7280"
+                android:layout_marginStart="6dp"/>
+        </LinearLayout>
+
+        <!-- Dates -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="6dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_calendar"
+                app:tint="#6B7280"/>
+
+            <TextView
+                android:id="@+id/txtDates"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="01/01/2025 to 10/01/2025"
+                android:textSize="14sp"
+                android:textColor="#6B7280"
+                android:layout_marginStart="6dp"/>
+        </LinearLayout>
+
+        <!-- Description -->
+        <TextView
+            android:id="@+id/txtDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Description of the jamat..."
+            android:textSize="14sp"
+            android:textColor="#4B5563"
+            android:layout_marginTop="12dp"
+            android:maxLines="3"
+            android:ellipsize="end"/>
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E5E7EB"
+            android:layout_marginVertical="12dp"/>
+
+        <!-- Request Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnRequest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Request to Join"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            app:cornerRadius="10dp"
+            app:backgroundTint="#2563EB"
+            android:paddingVertical="12dp"
+            app:icon="@drawable/ic_send"
+            app:iconGravity="textStart"
+            app:iconTint="#FFFFFF"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

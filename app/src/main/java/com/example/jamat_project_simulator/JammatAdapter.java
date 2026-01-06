@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 
@@ -41,7 +42,7 @@ public class JammatAdapter extends RecyclerView.Adapter<JammatAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         JammatModel model = list.get(position);
 
-        // 🔹 Bind data
+        // Bind data
         holder.txtName.setText(model.getName());
         holder.txtRoute.setText(model.getStartCity() + " → " + model.getEndCity());
         holder.txtDate.setText(model.getStartDate());
@@ -55,7 +56,7 @@ public class JammatAdapter extends RecyclerView.Adapter<JammatAdapter.ViewHolder
                 int id = item.getItemId();
 
                 if (id == R.id.menu_update) {
-                    // 🔹 Open Update Activity
+                    // Open Update Activity
                     Intent intent = new Intent(context, UpdateJammatActivity.class);
                     intent.putExtra("jammatId", model.getId());
                     intent.putExtra("name", model.getName());
@@ -68,25 +69,8 @@ public class JammatAdapter extends RecyclerView.Adapter<JammatAdapter.ViewHolder
                     return true;
 
                 } else if (id == R.id.menu_delete) {
-                    // 🔹 Show confirmation dialog
-                    new AlertDialog.Builder(context)
-                            .setTitle("Delete Jammat")
-                            .setMessage("Are you sure you want to delete this Jammat?")
-                            .setPositiveButton("Yes", (dialog, which) -> {
-                                // Delete from Firestore
-                                db.collection("Jammat").document(model.getId())
-                                        .delete()
-                                        .addOnSuccessListener(aVoid -> {
-                                            Toast.makeText(context, "Deleted " + model.getName(), Toast.LENGTH_SHORT).show();
-                                            list.remove(position);
-                                            notifyItemRemoved(position);
-                                        })
-                                        .addOnFailureListener(e -> {
-                                            Toast.makeText(context, "Failed to delete " + model.getName(), Toast.LENGTH_SHORT).show();
-                                        });
-                            })
-                            .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
-                            .show();
+                    // Show confirmation dialog with request count
+                    showDeleteConfirmation(model, position);
                     return true;
                 }
                 return false;
@@ -94,6 +78,113 @@ public class JammatAdapter extends RecyclerView.Adapter<JammatAdapter.ViewHolder
 
             popup.show();
         });
+    }
+
+    private void showDeleteConfirmation(JammatModel model, int position) {
+        // First, count how many requests are associated with this Jamat
+        db.collection("JoinRequests")
+                .whereEqualTo("jammatId", model.getId())
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    int requestCount = queryDocumentSnapshots.size();
+
+                    // Show confirmation dialog with count
+                    String message = "Are you sure you want to delete this Jammat?";
+                    if (requestCount > 0) {
+                        message += "\n\nThis will also delete " + requestCount +
+                                (requestCount == 1 ? " related request." : " related requests.");
+                    }
+
+                    new AlertDialog.Builder(context)
+                            .setTitle("Delete Jammat")
+                            .setMessage(message)
+                            .setPositiveButton("Delete", (dialog, which) -> {
+                                deleteJammatAndRequests(model, position, requestCount);
+                            })
+                            .setNegativeButton("Cancel", null)
+                            .show();
+                })
+                .addOnFailureListener(e -> {
+                    // If counting fails, still allow deletion
+                    new AlertDialog.Builder(context)
+                            .setTitle("Delete Jammat")
+                            .setMessage("Are you sure you want to delete this Jammat?")
+                            .setPositiveButton("Delete", (dialog, which) -> {
+                                deleteJammatAndRequests(model, position, 0);
+                            })
+                            .setNegativeButton("Cancel", null)
+                            .show();
+                });
+    }
+
+    private void deleteJammatAndRequests(JammatModel model, int position, int requestCount) {
+        // Step 1: Delete the Jamat
+        db.collection("Jammat").document(model.getId())
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    // Step 2: Delete all related requests
+                    if (requestCount > 0) {
+                        deleteRelatedRequests(model.getId(), model.getName(), position);
+                    } else {
+                        // No requests to delete, just update UI
+                        Toast.makeText(context, "Deleted " + model.getName(), Toast.LENGTH_SHORT).show();
+                        list.remove(position);
+                        notifyItemRemoved(position);
+                        notifyItemRangeChanged(position, list.size());
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(context, "Failed to delete " + model.getName(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void deleteRelatedRequests(String jammatId, String jammatName, int position) {
+        db.collection("JoinRequests")
+                .whereEqualTo("jammatId", jammatId)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    int deletedCount = 0;
+                    int totalRequests = queryDocumentSnapshots.size();
+
+                    if (totalRequests == 0) {
+                        // No requests found
+                        Toast.makeText(context, "Deleted " + jammatName, Toast.LENGTH_SHORT).show();
+                        list.remove(position);
+                        notifyItemRemoved(position);
+                        notifyItemRangeChanged(position, list.size());
+                        return;
+                    }
+
+                    // Delete each request
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        doc.getReference().delete()
+                                .addOnSuccessListener(aVoid -> {
+                                    // Request deleted
+                                })
+                                .addOnFailureListener(e -> {
+                                    // Ignore individual failures
+                                });
+                    }
+
+                    // Show success message and update UI
+                    String message = "Deleted " + jammatName;
+                    if (totalRequests > 0) {
+                        message += " and " + totalRequests + (totalRequests == 1 ? " request" : " requests");
+                    }
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+
+                    list.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, list.size());
+                })
+                .addOnFailureListener(e -> {
+                    // Even if request deletion fails, Jamat is already deleted
+                    Toast.makeText(context, "Deleted " + jammatName + " (some requests may remain)",
+                            Toast.LENGTH_LONG).show();
+                    list.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, list.size());
+                });
     }
 
     @Override
